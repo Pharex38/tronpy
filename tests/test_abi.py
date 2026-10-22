@@ -43,3 +43,13 @@ def test_abi_decode_non_strict():
         ),
         strict=False,
     ) == ("TPJNfTfBunWWqME2Povh6thCffaUDumkXV", 200000000)
+
+
+def test_abi_trc_token():
+    encoded = trx_abi.encode_abi(["trcToken", "uint256"], [1000001, 5])
+    assert encoded.hex() == (
+        "00000000000000000000000000000000000000000000000000000000000f4241"
+        + "0000000000000000000000000000000000000000000000000000000000000005"
+    )
+    assert trx_abi.decode_abi(["trcToken", "uint256"], encoded) == (1000001, 5)
+    assert trx_abi.encode_single("trcToken", 1000001) == trx_abi.encode_single("uint256", 1000001)

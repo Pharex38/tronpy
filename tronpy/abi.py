@@ -54,6 +54,20 @@ class TronAddressEncoder(Fixed32ByteSizeEncoder):
         return cls()
 
 
+class TrcTokenEncoder(eth_abi.encoding.UnsignedIntegerEncoder):
+    """A ``trcToken`` (TRC10 token id) is encoded like a ``uint256``."""
+
+    @parse_type_str("trcToken")
+    def from_type_str(cls, abi_type, registry):
+        return cls(value_bit_size=256)
+
+
+class TrcTokenDecoder(eth_abi.decoding.UnsignedIntegerDecoder):
+    @parse_type_str("trcToken")
+    def from_type_str(cls, abi_type, registry):
+        return cls(value_bit_size=256)
+
+
 def do_patching(registry):
     registry.unregister("address")
 
@@ -66,8 +80,8 @@ def do_patching(registry):
 
     registry.register(
         BaseEquals("trcToken"),
-        eth_abi.encoding.UnsignedIntegerEncoder,
-        eth_abi.decoding.UnsignedIntegerDecoder,
+        TrcTokenEncoder,
+        TrcTokenDecoder,
         label="trcToken",
     )
 
