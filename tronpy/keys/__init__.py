@@ -1,7 +1,7 @@
 import hashlib
 import os
 from collections.abc import Hashable, Iterator, Sequence
-from typing import Any, Union
+from typing import TYPE_CHECKING, Any, Union
 
 import base58
 from coincurve import PrivateKey as CoincurvePrivateKey
@@ -9,6 +9,9 @@ from coincurve import PublicKey as CoincurvePublicKey
 from Crypto.Hash import keccak
 
 from tronpy.exceptions import BadAddress, BadKey, BadSignature
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 SECPK1_N = 115792089237316195423570985008687907852837564279074904382605163141518161494337
 TRON_MESSAGE_PREFIX = "\x19TRON Signed Message:\n"
@@ -147,7 +150,7 @@ class BaseKey(Sequence, Hashable):
         return self._raw_key.hex()
 
     @classmethod
-    def fromhex(cls, hex_str: str) -> "BaseKey":
+    def fromhex(cls, hex_str: str) -> "Self":
         """
         Construct a key from a hex str.
 
